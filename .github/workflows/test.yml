@@ -15,17 +15,22 @@ jobs:
       with:
         images: quadrum-solutions/mercury
         tags: |
-          type=ref,event=branch
-          type=ref,event=pr
+          type=ref,event=tag
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{raw}}
           type=sha
+          type=raw,value=gexp-branch-{{branch}}
+          type=raw,value=gexp-date-{{date 'YYYYMMDD'}}
+          type=raw,value=gexp-tag-{{tag}}
+          type=raw,value=gexp-baseref-{{base_ref}}
+          type=raw,value=gexp-defbranch,enable={{is_default_branch}}
 
     - name: Generate metadata file
       uses: "finnp/create-file-action@master"
       env:
         FILE_NAME: "dir/fileName.txt"
-        FILE_DATA: "${DOCKER_METADATA_OUTPUT_JSON}"
+        FILE_DATA: ${DOCKER_METADATA_OUTPUT_JSON}
 
     - name: Test output
       run: cat dir/fileName.txt
