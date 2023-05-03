@@ -13,7 +13,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: quadrum-solutions/mercury
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 #        tags: |
 #          type=raw,value=branch:{{branch}}
 #          type=raw,value=Date:{{date 'YYYY-MM-DD'}}
@@ -24,7 +24,7 @@ jobs:
       uses: "finnp/create-file-action@master"
       env:
         FILE_NAME: "dir/fileName.txt"
-        FILE_DATA: ${DOCKER_METADATA_OUTPUT_JSON}
+        FILE_DATA: ${{env.DOCKER_METADATA_OUTPUT_JSON}}
 
     - name: Test output
       run: cat dir/fileName.txt
