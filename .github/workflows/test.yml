@@ -1,11 +1,6 @@
-28 lines (24 sloc)  629 Bytes
- 
-
-name: CodeCov
+name: Test
 
 on:
-  schedule:
-    - cron:  "0 8 * * 1"
   workflow_dispatch: # Allow to manually trigger
 
 jobs:
