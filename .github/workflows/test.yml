@@ -14,11 +14,11 @@ jobs:
       uses: docker/metadata-action@v4
       with:
         images: quadrum-solutions/mercury
-        tags: |
-          type=raw,value=branch:{{branch}}
-          type=raw,value=Date:{{date 'YYYY-MM-DD'}}
-          type=raw,value=Tag:{{tag}}
-          type=raw,value=Baseref:{{base_ref}}
+#        tags: |
+#          type=raw,value=branch:{{branch}}
+#          type=raw,value=Date:{{date 'YYYY-MM-DD'}}
+#          type=raw,value=Tag:{{tag}}
+#          type=raw,value=Baseref:{{base_ref}}
 
     - name: Generate metadata file
       uses: "finnp/create-file-action@master"
