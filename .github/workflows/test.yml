@@ -12,3 +12,5 @@ jobs:
       env:
         FILE_NAME: "dir/fileName.txt"
         FILE_DATA: "file content"
+    - name: Test output
+      run: cat dir/fileName.txt
