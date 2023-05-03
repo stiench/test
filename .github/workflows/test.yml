@@ -25,7 +25,7 @@ jobs:
       uses: "finnp/create-file-action@master"
       env:
         FILE_NAME: "dir/fileName.txt"
-        FILE_DATA: ${{DOCKER_METADATA_OUTPUT_JSON}}
+        FILE_DATA: "${{DOCKER_METADATA_OUTPUT_JSON}}"
 
     - name: Test output
       run: cat dir/fileName.txt
