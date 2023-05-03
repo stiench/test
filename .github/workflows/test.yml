@@ -7,6 +7,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: name/app
+
     - name: Generate metadata file
       uses: "finnp/create-file-action@master"
       env:
