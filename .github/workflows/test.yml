@@ -8,9 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Generate metadata file
-      uses: hashicorp/actions-generate-metadata@main
-      id: execute
-      with:
-        repository: consul-terraform-sync
-        version: make version
-        metadataFileName: metadata.json
+      uses: "finnp/create-file-action@master"
+      env:
+        FILE_NAME: "dir/fileName.txt"
+        FILE_DATA: "file content"
