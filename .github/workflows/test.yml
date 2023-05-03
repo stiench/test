@@ -13,12 +13,27 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: name/app
+        images: quadrum-solutions/mercury
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,
+    - name: Build
+        uses: docker/bake-action@v2
+        with:
+          files: |
+            ./docker-bake.hcl
+            ${{ steps.meta.outputs.bake-file }}
+          targets: build
 
     - name: Generate metadata file
       uses: "finnp/create-file-action@master"
       env:
         FILE_NAME: "dir/fileName.txt"
         FILE_DATA: "file content"
+
     - name: Test output
       run: cat dir/fileName.txt
+    - name: Test output2
+      run: cat docker-bake.hcl
