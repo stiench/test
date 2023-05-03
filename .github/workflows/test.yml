@@ -15,16 +15,10 @@ jobs:
       with:
         images: quadrum-solutions/mercury
         tags: |
-          type=ref,event=tag
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{raw}}
-          type=sha
-          type=raw,value=gexp-branch-{{branch}}
-          type=raw,value=gexp-date-{{date 'YYYYMMDD'}}
-          type=raw,value=gexp-tag-{{tag}}
-          type=raw,value=gexp-baseref-{{base_ref}}
-          type=raw,value=gexp-defbranch,enable={{is_default_branch}}
+          type=raw,value=branch:{{branch}}
+          type=raw,value=Date:{{date 'YYYY-MM-DD'}}
+          type=raw,value=Tag:{{tag}}
+          type=raw,value=Baseref:{{base_ref}}
 
     - name: Generate metadata file
       uses: "finnp/create-file-action@master"
