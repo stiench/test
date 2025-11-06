@@ -78,5 +78,5 @@ jobs:
 
       - name: Echo
         run: |
-          echo Version : ${{ needs.determine_latest.outputs.on_main }}
+          echo latest : ${{ needs.determine_latest.outputs.on_main }}
 
