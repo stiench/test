@@ -1,0 +1,82 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags: ['v[0-9].[0-9]+.[0-9]+']
+  workflow_dispatch: # Allow to manually trigger
+
+env:
+  DOCKER_FILE: ./Dockerfile.prod
+  DOCKER_FILE_K8: ./DockerfileK8.prod
+  REGISTRY_GH: ghcr.io
+  REGISTRY_DH: docker.io
+  IMAGE_NAME_GH: ${{ github.repository }}
+  IMAGE_NAME_DH: quadrumsolution/freddie
+  IMAGE_NAME_DH_K8: quadrumsolution/freddiek8
+  HASH_FILE_NAME: /tmp/freddie/${{ github.ref_name }}.txt
+
+jobs:
+  determine_latest:
+    runs-on: ubuntu-latest
+
+    # This job runs once per workflow and determines whether the tagged commit
+    # is (or is contained in) the remote `origin/main` history. It exposes a
+    # job output `on_main` which other jobs can consume to decide whether to
+    # tag/push `:latest`.
+    outputs:
+      on_main: ${{ steps.check_main.outputs.on_main }}
+
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Determine if tag commit is on remote main branch
+        id: check_main
+        run: |
+          set -e
+          # Ensure we have the remote main ref
+          git fetch origin main --quiet || true
+          if git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "on_main=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "on_main=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  push_and_build_k8:
+    runs-on: ubuntu-latest
+    needs: determine_latest
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.6.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.9.0
+        with:
+          images: |
+            ${{ env.REGISTRY_DH }}/${{ env.IMAGE_NAME_DH_K8 }}
+          flavor: |
+            latest=${{ needs.determine_latest.outputs.on_main == 'true' }}
+            prefix=
+            suffix=
+
+      - name: Export digest
+        run: |
+          echo Version : ${{ needs.determine_latest.outputs.on_main }}
+
