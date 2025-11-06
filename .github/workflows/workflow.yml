@@ -44,12 +44,12 @@ jobs:
             ${{ env.REGISTRY_DH }}/${{ env.IMAGE_NAME_DH_K8 }}
           tags: |
             # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
             type=semver,pattern={{version}}
 
 
       - name: Echo
         run: |
-          echo determine_latest : ${{ needs.determine_latest.outputs.on_main }}
+          echo branch : ${{ github.ref }}
           echo meta : ${{ steps.meta.outputs.tags }}
 
