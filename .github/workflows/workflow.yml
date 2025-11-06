@@ -78,5 +78,6 @@ jobs:
 
       - name: Echo
         run: |
-          echo latest : ${{ needs.determine_latest.outputs.on_main }}
+          echo determine_latest : ${{ needs.determine_latest.outputs.on_main }}
+          echo meta : ${{ steps.meta.outputs.tags }}
 
