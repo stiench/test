@@ -43,8 +43,8 @@ jobs:
           images: |
             ${{ env.REGISTRY_DH }}/${{ env.IMAGE_NAME_DH_K8 }}
           tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            # set latest tag only when tag is pushed from main branch
+            type=raw,value=latest,enable=${{ github.event.base_ref == 'refs/heads/main' || github.ref_name == 'main' }}
             type=semver,pattern={{version}}
 
 
